@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Entry {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  entry        String       @unique
+  phonetics    Phonetic[]
+  partOfSpeech PartOfSpeech
+  mandarin     String[]
+}
+
+type Phonetic {
+  audio     String
+  sourceUrl String?
+  license   License?
+  text      String?
+}
+
+type PartOfSpeech {
+  partOfSpeech String
+  definition   String
+}
+
+type License {
+  name String
+  url  String
+}
