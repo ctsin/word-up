@@ -8,6 +8,7 @@ import cors from "cors";
 import debug from "debug";
 import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
+import { helloRouter } from "./routes/helloRoute";
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.use(
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to WordUp app");
 });
+
+app.use("/hello", helloRouter);
 
 app.listen(PORT, () => {
   debugLog("Debugging ON");
