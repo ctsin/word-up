@@ -1,4 +1,4 @@
-import { Entry } from "@prisma/client";
+import type { Entry } from "@/prisma";
 import { Dictionaries } from "@/interface/dictionary";
 
 export type EntryValues = Omit<Entry, "id">;

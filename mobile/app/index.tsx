@@ -8,7 +8,9 @@ import { Entry } from "@/components/Entry";
 import { PartOfSpeech as PartOfSpeechProps } from "@/interface/dictionary";
 import { PartOfSpeech } from "@/components/PartOfSpeech";
 import { AutoUpdateFields } from "@/app/AutoUpdateFields";
-import { createEntryService } from "@/services/entry";
+import { useCreate } from "@/services/entry";
+import { useEffect } from "react";
+import { isUndefined } from "lodash";
 
 const initialValues: Values = {
   entry: "",
@@ -20,6 +22,11 @@ const initialValues: Values = {
 };
 
 export default function Create() {
+  const { mutate, data } = useCreate();
+  useEffect(() => {
+    if (isUndefined(data)) return;
+    console.log("data: ", data.data);
+  }, [data]);
   const onSubmit: FormikConfig<Values>["onSubmit"] = async ({
     entry,
     mandarin,
@@ -27,7 +34,7 @@ export default function Create() {
     phonetics,
   }) => {
     try {
-      await createEntryService({ entry, mandarin, partOfSpeech, phonetics });
+      mutate({ entry, mandarin, partOfSpeech, phonetics });
     } catch (error) {
       console.error(`Creation failed with error: ${error}`);
     }

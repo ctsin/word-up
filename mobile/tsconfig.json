@@ -11,7 +11,7 @@
       "@/services/*": ["services/*"],
       "@/components/*": ["components/*"],
       "@/interface/*": ["interface/*"],
-      "@/prisma/*": ["prisma/*"]
+      "@/prisma": ["../server/prisma/interface.ts"]
     }
   }
 }
