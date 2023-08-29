@@ -1,7 +1,7 @@
 import { useCreateContext } from "@/hooks/useCreateContext";
 import { ValuesKey } from "@/interface/createEntry";
 import { Meaning, Definition, Dictionary } from "@/interface/dictionary";
-import { isNull, get } from "lodash";
+import { get, isUndefined } from "lodash";
 import { useEffect } from "react";
 
 export const AutoUpdateFields = () => {
@@ -9,8 +9,8 @@ export const AutoUpdateFields = () => {
   const { dictionaries, selected } = values;
 
   useEffect(() => {
-    if (isNull(dictionaries)) return;
-    if (isNull(selected)) return;
+    if (isUndefined(dictionaries)) return;
+    if (isUndefined(selected)) return;
 
     const phoneticsKey: ValuesKey = "phonetics";
     const partOfSpeechKey: ValuesKey = "partOfSpeech";

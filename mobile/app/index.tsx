@@ -7,26 +7,26 @@ import { Values } from "@/interface/createEntry";
 import { Entry } from "@/components/Entry";
 import { PartOfSpeech as PartOfSpeechProps } from "@/interface/dictionary";
 import { PartOfSpeech } from "@/components/PartOfSpeech";
-import { AutoUpdateFields } from "@/app/AutoUpdateFields";
 import { useCreate } from "@/services/entry";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { isUndefined } from "lodash";
+import { Successfully } from "@/components/Successfully";
+import { AutoUpdateFields } from "@/components/AutoUpdateFields";
 
 const initialValues: Values = {
   entry: "",
   phonetics: [],
   partOfSpeech: {} as PartOfSpeechProps,
   mandarin: [],
-  dictionaries: null,
-  selected: null,
+  dictionaries: undefined,
+  selected: undefined,
 };
 
 export default function Create() {
   const { mutate, data } = useCreate();
-  useEffect(() => {
-    if (isUndefined(data)) return;
-    console.log("data: ", data.data);
-  }, [data]);
+
+  const created = useMemo(() => !isUndefined(data), [data]);
+
   const onSubmit: FormikConfig<Values>["onSubmit"] = async ({
     entry,
     mandarin,
@@ -55,6 +55,8 @@ export default function Create() {
             <Button onPress={() => handleSubmit()} mode="contained">
               提交
             </Button>
+
+            {created && <Successfully />}
           </ScrollView>
         );
       }}

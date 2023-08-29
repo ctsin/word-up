@@ -1,6 +1,6 @@
 import { useCreateContext } from "@/hooks/useCreateContext";
 import { ValuesKey } from "@/interface/createEntry";
-import { isNil, isNull } from "lodash";
+import { isUndefined } from "lodash";
 import { Fragment } from "react";
 import { List, Divider, Chip } from "react-native-paper";
 
@@ -10,7 +10,7 @@ export const PartOfSpeech = () => {
     setFieldValue,
   } = useCreateContext();
 
-  if (isNil(dictionaries)) return null;
+  if (isUndefined(dictionaries)) return null;
 
   const onSelected =
     (dictionaryIndex: number, meaningIndex: number, definitionIndex: number) =>
@@ -34,7 +34,7 @@ export const PartOfSpeech = () => {
                   {!!meaningIndex && <Divider />}
                   <List.Item title={<Chip compact>{partOfSpeech}</Chip>} />
                   {definitions.map(({ definition }, definitionIndex) => {
-                    const isCurrent = isNull(selected)
+                    const isCurrent = isUndefined(selected)
                       ? false
                       : [
                           dictionaryIndex,

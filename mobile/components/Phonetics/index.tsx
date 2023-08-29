@@ -1,5 +1,5 @@
 import { Phonetic } from "@/components/Phonetic";
-import { isNull } from "lodash";
+import { isUndefined } from "lodash";
 import { View } from "react-native";
 import { useCreateContext } from "@/hooks/useCreateContext";
 
@@ -8,7 +8,7 @@ export const Phonetics = () => {
     values: { selected, phonetics },
   } = useCreateContext();
 
-  if (isNull(selected)) return null;
+  if (isUndefined(selected)) return null;
 
   return (
     <View style={{ flexDirection: "row" }}>

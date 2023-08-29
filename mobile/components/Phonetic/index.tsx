@@ -1,5 +1,5 @@
 import { Button } from "react-native-paper";
-import type { Props } from "react-native-paper/src/components/Button/Button";
+import type { Props as ButtonProps } from "react-native-paper/src/components/Button/Button";
 import { Phonetic as PhoneticProps } from "@/interface/dictionary";
 import { usePlayAudio } from "@/hooks/usePlayAudio";
 import { GB } from "@/components/Flags/GB";
@@ -12,7 +12,7 @@ export const Phonetic = ({ audio, text }: PhoneticProps) => {
 
   if (isEmpty(text)) return null;
 
-  const commonProps: Pick<Props, "disabled"> = {
+  const commonProps: Pick<ButtonProps, "disabled"> = {
     disabled: loading,
   };
 

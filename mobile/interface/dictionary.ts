@@ -1,3 +1,5 @@
+import { Entry } from "@/prisma";
+
 export interface Dictionary {
   word: string;
   phonetics: Phonetics;
@@ -36,11 +38,6 @@ export interface Definition {
 
 export type definitions = Definition[];
 
-export interface Phonetic {
-  audio: string;
-  sourceUrl?: string;
-  license?: License;
-  text?: string;
-}
+export type Phonetic = Entry["phonetics"][number];
 
 export type Phonetics = Phonetic[];

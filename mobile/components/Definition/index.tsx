@@ -1,5 +1,5 @@
 import { useCreateContext } from "@/hooks/useCreateContext";
-import { isNull } from "lodash";
+import { isUndefined } from "lodash";
 import { ComponentProps } from "react";
 import { Card, Chip, IconButton, TextInput } from "react-native-paper";
 
@@ -11,7 +11,7 @@ export const Definition = () => {
     },
   } = useCreateContext();
 
-  if (isNull(selected)) return null;
+  if (isUndefined(selected)) return null;
 
   return (
     <Card>
