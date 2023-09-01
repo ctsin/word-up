@@ -1,9 +1,9 @@
 import type { Entry } from "@/prisma";
-import { Dictionaries } from "@/interface/dictionary";
+import { IDictionaries } from "@/interface/dictionary";
 
 export type EntryValues = Omit<Entry, "id">;
 export interface Values extends EntryValues {
-  dictionaries: Dictionaries | undefined;
+  dictionaries: IDictionaries | undefined;
   selected:
     | [dictionaryIndex: number, meaningIndex: number, definitionIndex: number]
     | undefined;

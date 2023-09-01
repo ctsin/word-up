@@ -1,14 +1,14 @@
 import { Phonetic } from "@/components/Phonetic";
-import { isUndefined } from "lodash";
+import { isEmpty } from "lodash";
 import { View } from "react-native";
-import { useCreateContext } from "@/hooks/useCreateContext";
+import { IPhonetics } from "@/interface/dictionary";
 
-export const Phonetics = () => {
-  const {
-    values: { selected, phonetics },
-  } = useCreateContext();
+type PhoneticsProps = {
+  phonetics: IPhonetics;
+};
 
-  if (isUndefined(selected)) return null;
+export const Phonetics = ({ phonetics }: PhoneticsProps) => {
+  if (isEmpty(phonetics)) return null;
 
   return (
     <View style={{ flexDirection: "row" }}>

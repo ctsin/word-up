@@ -1,33 +1,33 @@
 import { Entry } from "@/prisma";
 
-export interface Dictionary {
+export interface IDictionary {
   word: string;
-  phonetics: Phonetics;
-  meanings: Meanings;
-  license: License;
+  phonetics: IPhonetics;
+  meanings: IMeanings;
+  license: ILicense;
   sourceUrls: string[];
 }
 
-export type Dictionaries = Dictionary[];
+export type IDictionaries = IDictionary[];
 
-export interface License {
+export interface ILicense {
   name: string;
   url: string;
 }
 
-export interface Meaning {
+export interface IMeaning {
   partOfSpeech: string;
-  definitions: Definition[];
+  definitions: IDefinitions;
   synonyms: string[];
   antonyms: string[];
 }
 
-export interface PartOfSpeech {
-  partOfSpeech: Meaning["partOfSpeech"];
+export interface IPartOfSpeech {
+  partOfSpeech: IMeaning["partOfSpeech"];
   definition: Definition["definition"];
 }
 
-export type Meanings = Meaning[];
+export type IMeanings = IMeaning[];
 
 export interface Definition {
   definition: string;
@@ -36,8 +36,8 @@ export interface Definition {
   example?: string;
 }
 
-export type definitions = Definition[];
+export type IDefinitions = Definition[];
 
-export type Phonetic = Entry["phonetics"][number];
+export type IPhonetic = Entry["phonetics"][number];
 
-export type Phonetics = Phonetic[];
+export type IPhonetics = IPhonetic[];

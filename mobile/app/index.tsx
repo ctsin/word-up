@@ -1,71 +1,77 @@
-import { ScrollView, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
-import { Formik, FormikConfig } from "formik";
-import { Definition } from "@/components/Definition";
-import { Phonetics } from "@/components/Phonetics";
-import { Values } from "@/interface/createEntry";
-import { Entry } from "@/components/Entry";
-import { PartOfSpeech as PartOfSpeechProps } from "@/interface/dictionary";
-import { PartOfSpeech } from "@/components/PartOfSpeech";
-import { useCreate } from "@/services/entry";
-import { useMemo } from "react";
+import { useEntries } from "@/hooks/useEntries";
 import { isUndefined } from "lodash";
-import { Successfully } from "@/components/Successfully";
-import { AutoUpdateFields } from "@/components/AutoUpdateFields";
+import { FlashList } from "@shopify/flash-list";
+import { useCallback, useRef, useState } from "react";
+import { Entry } from "@/prisma";
+import { Button, List, Text } from "react-native-paper";
+import { Stack, router } from "expo-router";
+import { Phonetics } from "@/components/Phonetics";
+import { ListBottomAction } from "@/components/ListBottomAction";
+import BottomSheet from "@gorhom/bottom-sheet";
 
-const initialValues: Values = {
-  entry: "",
-  phonetics: [],
-  partOfSpeech: {} as PartOfSpeechProps,
-  mandarin: [],
-  dictionaries: undefined,
-  selected: undefined,
-};
+export default function Entries() {
+  const [targetID, setTargetID] = useState("");
+  const bottomRef = useRef<BottomSheet>(null);
 
-export default function Create() {
-  const { mutate, data } = useCreate();
+  const { data: entries } = useEntries();
 
-  const created = useMemo(() => !isUndefined(data), [data]);
+  const renderItem = useCallback(
+    ({
+      item: {
+        id,
+        phonetics,
+        entry,
+        partOfSpeech: { partOfSpeech },
+      },
+    }: {
+      item: Entry;
+    }) => (
+      <List.Item
+        title={entry}
+        description={(props) => <Phonetics {...props} phonetics={phonetics} />}
+        right={(props) => <Text {...props}>{partOfSpeech}</Text>}
+        onLongPress={() => {
+          setTargetID(id);
 
-  const onSubmit: FormikConfig<Values>["onSubmit"] = async ({
-    entry,
-    mandarin,
-    partOfSpeech,
-    phonetics,
-  }) => {
-    try {
-      mutate({ entry, mandarin, partOfSpeech, phonetics });
-    } catch (error) {
-      console.error(`Creation failed with error: ${error}`);
-    }
-  };
+          bottomRef.current?.expand();
+        }}
+        onPress={() => {
+          router.push(`/detail/${id}`);
+        }}
+      />
+    ),
+    []
+  );
+
+  if (isUndefined(entries)) return null;
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {({ handleSubmit }) => {
-        return (
-          <ScrollView style={styles.container}>
-            <AutoUpdateFields />
-
-            <Entry />
-            <Phonetics />
-            <Definition />
-            <PartOfSpeech />
-
-            <Button onPress={() => handleSubmit()} mode="contained">
-              提交
+    <>
+      <Stack.Screen
+        options={{
+          title: "列表",
+          headerTitle: (props) => <Text {...props}>开始</Text>,
+          headerRight: () => (
+            <Button
+              onPress={() => {
+                router.push("/create");
+              }}
+              icon="plus"
+            >
+              新建
             </Button>
-
-            {created && <Successfully />}
-          </ScrollView>
-        );
-      }}
-    </Formik>
+          ),
+        }}
+      />
+      <FlashList
+        data={entries}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        estimatedItemSize={64}
+      />
+      <BottomSheet index={-1} snapPoints={["30%"]} ref={bottomRef}>
+        <ListBottomAction entryID={targetID} />
+      </BottomSheet>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-});

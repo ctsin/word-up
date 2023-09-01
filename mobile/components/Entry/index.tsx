@@ -1,8 +1,8 @@
-import { useEntry } from "@/hooks/useEntry";
+import { useEntryInput } from "@/hooks/useEntryInput";
 import { TextInput, ActivityIndicator } from "react-native-paper";
 
 export const Entry = () => {
-  const { onChange, isInitialLoading } = useEntry();
+  const { onChange, isInitialLoading } = useEntryInput();
 
   return (
     <TextInput

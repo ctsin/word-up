@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { PaperProvider } from "react-native-paper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ export default function Layout() {
   return (
     <QueryClientProvider client={queryClient}>
       <PaperProvider>
-        <Tabs />
+        <Stack />
         <StatusBar />
       </PaperProvider>
     </QueryClientProvider>

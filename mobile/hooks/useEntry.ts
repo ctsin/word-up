@@ -1,42 +1,13 @@
-import { useCreateContext } from "@/hooks/useCreateContext";
-import { ValuesKey } from "@/interface/createEntry";
-import { Dictionaries } from "@/interface/dictionary";
-import { QueryOptions, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { API } from "const/API";
-import { isEmpty, isNull } from "lodash";
-import { useEffect } from "react";
+import { useEntries } from "@/hooks/useEntries";
+import { Entry } from "@/prisma";
+import { isUndefined } from "lodash";
 
-export const useEntry = () => {
-  const dictionaries: ValuesKey = "dictionaries";
+export const useEntry = (entryID: Entry["id"] | undefined) => {
+  const { data: entries } = useEntries();
 
-  const {
-    setFieldValue,
-    setFieldError,
-    handleChange,
-    values: { entry },
-  } = useCreateContext();
+  if (isUndefined(entryID)) return null;
 
-  const queryFn: QueryOptions<Dictionaries>["queryFn"] = ({ signal }) =>
-    axios
-      .get(`${API.DICTIONARY}/${entry}`, { signal })
-      .then(({ data }) => data);
+  if (isUndefined(entries)) return null;
 
-  const response = useQuery({
-    queryKey: [entry],
-    queryFn,
-    enabled: !isEmpty(entry),
-  });
-
-  const { error, data } = response;
-
-  useEffect(() => {
-    isNull(error)
-      ? setFieldValue(dictionaries, data)
-      : setFieldError(dictionaries, error as any);
-  }, [data, error, setFieldError, setFieldValue]);
-
-  const onChange = handleChange("entry");
-
-  return { ...response, onChange };
+  return entries.find((entry) => entry.id === entryID)!;
 };

@@ -1,6 +1,6 @@
 import { Button } from "react-native-paper";
 import type { Props as ButtonProps } from "react-native-paper/src/components/Button/Button";
-import { Phonetic as PhoneticProps } from "@/interface/dictionary";
+import { IPhonetic as PhoneticProps } from "@/interface/dictionary";
 import { usePlayAudio } from "@/hooks/usePlayAudio";
 import { GB } from "@/components/Flags/GB";
 import { US } from "@/components/Flags/US";
