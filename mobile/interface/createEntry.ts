@@ -1,7 +1,9 @@
-import type { Entry } from "@/prisma";
+import type { EntryWithRelated } from "@/prisma";
 import { IDictionaries } from "@/interface/dictionary";
 
-export type EntryValues = Omit<Entry, "id">;
+export { Entry } from "@/prisma";
+
+export type EntryValues = Omit<EntryWithRelated, "id">;
 export interface Values extends EntryValues {
   dictionaries: IDictionaries | undefined;
   selected:

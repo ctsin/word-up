@@ -1,4 +1,4 @@
-import { Entry } from "@/prisma";
+import { EntryWithRelated } from "@/prisma";
 
 export interface IDictionary {
   word: string;
@@ -38,6 +38,6 @@ export interface Definition {
 
 export type IDefinitions = Definition[];
 
-export type IPhonetic = Entry["phonetics"][number];
+export type IPhonetic = EntryWithRelated["phonetics"][number];
 
 export type IPhonetics = IPhonetic[];

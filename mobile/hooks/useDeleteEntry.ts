@@ -1,6 +1,6 @@
 import { API } from "@/const/API";
 import { QUERY_KEYS } from "@/const/queryKey";
-import { Entry } from "@/prisma";
+import { EntryWithRelated } from "@/prisma";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ export const useDeleteEntry = ({ onSuccess }: UseDeleteEntryParams = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (entryID: Entry["id"]) => {
+    mutationFn: async (entryID: EntryWithRelated["id"]) => {
       const searchParams = new URLSearchParams({ entryID }).toString();
 
       const { data } = await axios.delete(

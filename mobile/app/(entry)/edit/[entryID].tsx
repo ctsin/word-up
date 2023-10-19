@@ -1,17 +1,19 @@
 import { Phonetics } from "@/components/Phonetics";
 import { useEntry } from "@/hooks/useEntry";
-import { Entry } from "@/prisma";
-import { Stack, useLocalSearchParams } from "expo-router";
-import { isNull, isUndefined } from "lodash";
-import { Button, Surface, Text } from "react-native-paper";
+import { useEntryID } from "@/hooks/useEntryID";
+import { Stack } from "expo-router";
+import { isUndefined } from "lodash";
+import { Divider, List, Text } from "react-native-paper";
+import { RelatedSection } from "@/components/RelatedSection";
+import { RelatedProvider } from "@/components/RelatedSection/RelatedProvider";
 
 export default function Edit() {
-  const { entryID } = useLocalSearchParams<{ entryID: Entry["id"] }>();
+  const entryID = useEntryID();
 
-  const entryItem = useEntry(entryID);
+  const { data: entryItem } = useEntry();
 
-  if (isNull(entryItem)) return null;
   if (isUndefined(entryID)) return null;
+  if (isUndefined(entryItem)) return null;
 
   const {
     entry,
@@ -23,16 +25,20 @@ export default function Edit() {
     <>
       <Stack.Screen
         options={{
+          title: "详情",
           headerTitle: (props) => <Text {...props}>编辑</Text>,
         }}
       />
-      <Surface mode="flat" elevation={0}>
-        <Text variant="headlineLarge">编辑：{entry}</Text>
-        <Text variant="labelSmall">{partOfSpeech}</Text>
-        <Phonetics phonetics={phonetics} />
-        <Text variant="labelSmall">{definition}</Text>
-        <Button mode="contained">确认</Button>
-      </Surface>
+
+      <List.Item title={entry} />
+      <List.Item title={partOfSpeech} />
+      <Phonetics phonetics={phonetics} />
+      <List.Item title={definition} />
+      <Divider />
+
+      <RelatedProvider>
+        <RelatedSection />
+      </RelatedProvider>
     </>
   );
 }

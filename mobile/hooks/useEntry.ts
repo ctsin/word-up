@@ -1,13 +1,16 @@
-import { useEntries } from "@/hooks/useEntries";
-import { Entry } from "@/prisma";
-import { isUndefined } from "lodash";
+import { API } from "@/const/API";
+import { useEntryQueryKey } from "@/hooks/useEntryQueryKey";
+import { EntryWithRelated } from "@/prisma";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-export const useEntry = (entryID: Entry["id"] | undefined) => {
-  const { data: entries } = useEntries();
-
-  if (isUndefined(entryID)) return null;
-
-  if (isUndefined(entries)) return null;
-
-  return entries.find((entry) => entry.id === entryID)!;
+export const useEntry = () => {
+  const searchParams = useEntryQueryKey();
+  return useQuery({
+    queryKey: [searchParams],
+    queryFn: () =>
+      axios
+        .get<EntryWithRelated>(`${API.SERVER}/entry?${searchParams}`)
+        .then(({ data }) => data),
+  });
 };

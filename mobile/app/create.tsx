@@ -18,12 +18,13 @@ const initialValues: Values = {
   phonetics: [],
   partOfSpeech: {} as PartOfSpeechProps,
   mandarin: [],
+  related: [],
   dictionaries: undefined,
   selected: undefined,
 };
 
 export default function Create() {
-  const { mutate, data } = useCreateEntry();
+  const { mutate, data, isLoading } = useCreateEntry();
 
   const created = useMemo(() => !isUndefined(data), [data]);
 
@@ -32,9 +33,10 @@ export default function Create() {
     mandarin,
     partOfSpeech,
     phonetics,
+    related,
   }) => {
     try {
-      mutate({ entry, mandarin, partOfSpeech, phonetics });
+      mutate({ entry, mandarin, partOfSpeech, phonetics, related });
     } catch (error) {
       console.error(`Creation failed with error: ${error}`);
     }
@@ -52,7 +54,11 @@ export default function Create() {
             <Definition />
             <PartOfSpeech />
 
-            <Button onPress={() => handleSubmit()} mode="contained">
+            <Button
+              loading={isLoading}
+              onPress={() => handleSubmit()}
+              mode="contained"
+            >
               提交
             </Button>
 
