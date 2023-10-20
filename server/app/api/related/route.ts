@@ -24,7 +24,7 @@ export const POST = async (request: NextRequest) => {
     },
     connectToTerm: {
       connect: {
-        id: id,
+        id,
       },
     },
     reason,

@@ -1,21 +1,19 @@
 import { API } from "@/const/API";
 import { QUERY_KEYS } from "@/const/queryKey";
-import { useEntryID } from "@/hooks/useEntryID";
 import { Entry, ReadRelatedTerm } from "@/prisma";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { isEmpty } from "lodash";
 
-export const useReadRelated = () => {
-  const entryID = useEntryID();
-
+export const useReadRelatedByID = (relatedID: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.RELATED_TERMS, entryID],
+    queryKey: [QUERY_KEYS.RELATED_TERM, relatedID],
     queryFn: () =>
       axios
-        .get<(ReadRelatedTerm & { connectToTerm: Entry })[]>(
-          `${API.SERVER}/related/of/${entryID}`
+        .get<ReadRelatedTerm & { connectToTerm: Entry }>(
+          `${API.SERVER}/related/with/${relatedID}`
         )
         .then(({ data }) => data),
-    initialData: [],
+    enabled: !isEmpty(relatedID),
   });
 };

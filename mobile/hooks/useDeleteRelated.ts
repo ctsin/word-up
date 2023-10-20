@@ -14,7 +14,7 @@ export const useDeleteRelated = (entryID: EntryID | undefined) => {
   return useMutation({
     mutationFn: async (IDList: EntryID | EntryID[]) => {
       const { data } = await axios.delete<Entry>(
-        `${API.SERVER}/related/${entryID}`,
+        `${API.SERVER}/related/of/${entryID}`,
         {
           data: Array.isArray(IDList) ? IDList : [IDList],
         }

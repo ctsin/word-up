@@ -11,6 +11,8 @@ export interface EntryWithReason extends Entry {
   reason: PrismaRelated["reason"] | "";
 }
 
+export type EditRelated = Pick<EntryWithReason, "id" | "entry" | "reason">;
+
 export interface EditEntryValues {
   mandarin: Mandarin;
 }

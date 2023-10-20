@@ -1,5 +1,4 @@
 import prisma from "@/prisma/client";
-import { Prisma } from "@prisma/client";
 import { isEmpty, isNil } from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 

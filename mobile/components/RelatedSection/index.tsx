@@ -1,4 +1,5 @@
-import { AddRelatedModal } from "@/components/RelatedModal";
+import { CreateRelatedModal } from "@/components/RelatedModal/CreateRelatedModal";
+import { EditRelatedModal } from "@/components/RelatedModal/EditRelatedModal";
 import { useRelatedContext } from "@/components/RelatedSection/RelatedProvider";
 import { useDeleteRelated } from "@/hooks/useDeleteRelated";
 import { useEntryID } from "@/hooks/useEntryID";
@@ -18,23 +19,20 @@ export const RelatedSection = () => {
         <ListItem key={id} id={id} title={entry} reason={reason} />
       ))}
 
-      <AddRelatedModal />
+      <CreateRelatedModal />
+      <EditRelatedModal />
     </>
   );
 };
 
 const ListTitle = () => {
-  const {
-    selecting,
-    selected,
-    select,
-    setCreationModalVisible: setVisible,
-  } = useRelatedContext();
+  const { selecting, selected, select, setCreationFilterModalVisible } =
+    useRelatedContext();
   const entryID = useEntryID();
   const { mutateAsync: deleteEntry, isLoading } = useDeleteRelated(entryID);
 
   const onAdd = () => {
-    setVisible(true);
+    setCreationFilterModalVisible(true);
   };
 
   const onRemove = async () => {
@@ -84,7 +82,8 @@ interface ListItemProps {
   reason: Reason;
 }
 const ListItem = ({ id, title, reason }: ListItemProps) => {
-  const { selecting, selected, select } = useRelatedContext();
+  const { selecting, selected, select, setEditModalVisible, setEditingID } =
+    useRelatedContext();
 
   const isSelected = useMemo(() => selected.includes(id), [id, selected]);
 
@@ -108,7 +107,10 @@ const ListItem = ({ id, title, reason }: ListItemProps) => {
     <List.Item
       title={title}
       right={(props) => <Chip {...props}>{reason}</Chip>}
-      onPress={() => console.log("EDIT")}
+      onPress={() => {
+        setEditingID(id);
+        setEditModalVisible(true);
+      }}
       onLongPress={() => {
         select((prev) => [...prev, id]);
       }}

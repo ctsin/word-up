@@ -30,7 +30,13 @@ export default function Edit() {
         }}
       />
 
-      <List.Item title={entry} />
+      <List.Item
+        title={(props) => (
+          <Text {...props} variant="displayLarge">
+            {entry}
+          </Text>
+        )}
+      />
       <List.Item title={partOfSpeech} />
       <Phonetics phonetics={phonetics} />
       <List.Item title={definition} />

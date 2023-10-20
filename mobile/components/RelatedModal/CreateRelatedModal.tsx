@@ -22,21 +22,21 @@ const CreationModal = () => {
   const { top } = useSafeAreaInsets();
   const entryID = useEntryID();
 
-  const { mutateAsync: createRelated } = useCreateRelated(entryID);
+  const { mutateAsync: createRelated, isLoading } = useCreateRelated(entryID);
 
   const { values, resetForm } = useFormikContext<EntryWithReason>();
   const {
     creationModalVisible,
     setCreationModalVisible,
-    setFilterModalVisible,
+    setCreationFilterModalVisible,
   } = useRelatedContext();
-
   const { id, entry, phonetics, partOfSpeech, mandarin, reason } = values;
 
   const disabled = useMemo(() => isEmpty(id) || isEmpty(reason), [id, reason]);
 
   const onClose = () => {
     resetForm();
+    setCreationFilterModalVisible(false);
     setCreationModalVisible(false);
   };
 
@@ -61,18 +61,6 @@ const CreationModal = () => {
           )}
         />
 
-        <Button
-          mode="contained-tonal"
-          icon="text-search"
-          style={styles.margin16}
-          contentStyle={{ justifyContent: "flex-start" }}
-          onPress={() => {
-            setFilterModalVisible(true);
-          }}
-        >
-          搜索
-        </Button>
-
         <View style={styles.margin16}>
           <Text variant="displayLarge">{entry}</Text>
           <Phonetics phonetics={phonetics} />
@@ -86,13 +74,17 @@ const CreationModal = () => {
           <View style={[styles.margin16, { gap: 16 * 2 }]}>
             <ReasonButtons />
 
-            <Button disabled={disabled} onPress={onDone} mode="contained">
+            <Button
+              disabled={disabled}
+              loading={isLoading}
+              onPress={onDone}
+              mode="contained"
+            >
               完成
             </Button>
           </View>
         )}
       </View>
-      <FilterModal />
     </Modal>
   );
 };
@@ -101,7 +93,11 @@ const FilterModal = () => {
   const { top } = useSafeAreaInsets();
 
   const { values, setValues } = useFormikContext<EntryWithReason>();
-  const { filterModalVisible, setFilterModalVisible } = useRelatedContext();
+  const {
+    setCreationModalVisible,
+    creationFilterModalVisible,
+    setCreationFilterModalVisible,
+  } = useRelatedContext();
 
   const [filter, setFilter] = useState("");
   const { data: filterResponse, isInitialLoading } = useEntryFilter(filter);
@@ -112,13 +108,13 @@ const FilterModal = () => {
       ...entry,
     });
 
-    setFilterModalVisible(false);
+    setCreationModalVisible(true);
   };
 
   return (
     <Modal
       transparent
-      visible={filterModalVisible}
+      visible={creationFilterModalVisible}
       animationType="slide"
       onDismiss={() => {
         setFilter("");
@@ -132,7 +128,7 @@ const FilterModal = () => {
               icon="close"
               {...props}
               onPress={() => {
-                setFilterModalVisible(false);
+                setCreationFilterModalVisible(false);
               }}
             />
           )}
@@ -166,6 +162,8 @@ const FilterModal = () => {
           );
         })}
       </View>
+
+      <CreationModal />
     </Modal>
   );
 };
@@ -197,7 +195,7 @@ const ReasonButtons = () => {
   );
 };
 
-export const AddRelatedModal = () => {
+export const CreateRelatedModal = () => {
   const initialValues: EntryWithReason = {
     id: "",
     entry: "",
@@ -209,7 +207,7 @@ export const AddRelatedModal = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={noop}>
-      <CreationModal />
+      <FilterModal />
     </Formik>
   );
 };

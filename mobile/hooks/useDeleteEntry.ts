@@ -12,7 +12,7 @@ export const useDeleteEntry = ({ onSuccess }: UseDeleteEntryParams = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (entryID: EntryWithRelated["id"]) => {
+    async mutationFn(entryID: EntryWithRelated["id"]) {
       const searchParams = new URLSearchParams({ entryID }).toString();
 
       const { data } = await axios.delete(
@@ -20,7 +20,7 @@ export const useDeleteEntry = ({ onSuccess }: UseDeleteEntryParams = {}) => {
       );
       return data;
     },
-    onSuccess: () => {
+    onSuccess() {
       onSuccess?.();
 
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ENTRIES] });
